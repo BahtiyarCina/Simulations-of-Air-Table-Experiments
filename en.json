@@ -1,0 +1,113 @@
+{
+  "app": {
+    "title": "Simulations of Air Table Experiments",
+    "home": "Home"
+  },
+  "home": {
+    "select": "Select the experiment you want to work with:"
+  },
+  "navbar": {
+    "collision": "Collision",
+    "freefall": "Free Fall",
+    "projectile": "Projectile Motion",
+    "pendulum": "Pendulum",
+    "wfc": "Sudoku WFC"
+  },
+  "buttons": {
+    "start": "Start",
+    "reset": "Reset",
+    "save": "Save",
+    "step": "Step",
+    "createBall": "Create Ball",
+    "spawnBalls": "Spawn Balls",
+    "removeBalls": "Remove Balls",
+    "setRectAngle": "Set Angle",
+    "trace": "Trace Mode",
+    "saveGraph": "Save Graph",
+    "saveData": "Save Data"
+  },
+  "labels": {
+    "mass": "Mass (kg)",
+    "speed": "Speed (m/s)",
+    "angle": "Angle (°)",
+    "direction": "Direction (°)",
+    "color": "Color",
+    "rectAngle": "Rectangle Angle (°)",
+    "height": "Height (m)",
+    "gravity": "Gravity (m/s²)",
+    "energyLoss": "Energy Loss (%)",
+    "bouncing": "Bouncing",
+    "airResistance": "Air Resistance",
+    "dragCoefficient": "Drag Coefficient",
+    "tableAngle": "Table Angle (°)",
+    "velocity": "Velocity (m/s)",
+    "length": "Length (m)",
+    "damping": "Damping",
+    "initialAngle": "Initial Angle (°)"
+  },
+  "collision": {
+    "title": "Collision Test",
+    "description": "Simulate collision between two objects",
+    "ballList": "Created Balls",
+    "trajectory": "Ball Records"
+  },
+  "freefall": {
+    "title": "Free Fall",
+    "description": "Investigate free fall motion",
+    "results": "Free Fall Results",
+    "time": "Time (s)",
+    "position": "Position (m)",
+    "velocity": "Velocity (m/s)",
+    "pe": "Potential Energy (J)",
+    "ke": "Kinetic Energy (J)"
+  },
+  "projectile": {
+    "title": "Projectile Motion",
+    "description": "Simulate projectile motion",
+    "initialVelocity": "Initial Velocity (m/s)",
+    "range": "Range (m)",
+    "maxHeight": "Maximum Height (m)",
+    "timeOfFlight": "Time of Flight (s)"
+  },
+  "pendulum": {
+    "title": "Pendulum Test",
+    "description": "Simulate pendulum motion",
+    "type": "Pendulum Type",
+    "single": "Single",
+    "double": "Double",
+    "length1": "Length 1 (m)",
+    "length2": "Length 2 (m)",
+    "mass1": "Mass 1 (kg)",
+    "mass2": "Mass 2 (kg)",
+    "angle1": "Angle 1 (°)",
+    "angle2": "Angle 2 (°)",
+    "period": "Period (s)",
+    "frequency": "Frequency (Hz)"
+  },
+  "wfc": {
+    "title": "Sudoku WFC",
+    "description": "Solve Sudoku with Wave Function Collapse"
+  },
+  "alerts": {
+    "invalidMass": "Enter a valid mass!",
+    "invalidHeight": "Enter a valid height!",
+    "invalidGravity": "Enter a valid gravity value!",
+    "invalidAngle": "Angle must be between 0° and 90°!",
+    "invalidInitialHeight": "Enter a valid initial height!",
+    "invalidDragCoefficient": "Enter a valid drag coefficient!",
+    "enterMass": "Enter mass!",
+    "enterSpeed": "Enter speed!",
+    "enterDirection": "Enter direction (degrees)!"
+  },
+  "graphs": {
+    "position": "Position-Time",
+    "velocity": "Velocity-Time",
+    "energy": "Energy-Time",
+    "angle": "Angle-Time",
+    "angularVelocity": "Angular Velocity-Time",
+    "phase": "Phase Space",
+    "time": "Motion Graphs",
+    "xAxis": "X Axis (m)",
+    "yAxis": "Y Axis (m)"
+  }
+}

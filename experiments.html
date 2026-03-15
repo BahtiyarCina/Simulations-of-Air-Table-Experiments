@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+ <html lang="tr" id="htmlElement">
+ <head>
+   <meta charset="UTF-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+   <title data-i18n="app.title"> Simulations of Air Table Experiments</title>
+   <style>
+     body {
+       display: flex;
+     flex-direction: column;
+     margin: 0;
+     padding: 0;
+     font-family: Arial, sans-serif;
+     background-color: #f0f0f0;
+     min-height: 100vh;
+     }
+     
+     .navbar {
+       display: flex;
+     background-color: #333;
+     padding: 0.8rem 1.2rem;
+     color: white;
+     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+     align-items: center;
+     flex-wrap: wrap;
+     }
+     
+     .navbar-brand {
+       font-size: 1.5rem;
+     font-weight: bold;
+     margin-right: 2rem;
+     white-space: nowrap;
+     }
+     
+     .navbar-menu {
+       display: flex;
+     gap: 1rem;
+     flex-wrap: wrap;
+     }
+     
+     .navbar-item {
+       cursor: pointer;
+     padding: 0.5rem 1rem;
+     border-radius: 4px;
+     transition: background-color 0.3s;
+     white-space: nowrap;
+     }
+     
+     .navbar-item:hover {
+       background-color: #555;
+     }
+     
+     .navbar-item.active {
+       background-color: #007acc;
+     }
+     
+     .experiment-container {
+       padding: 1.25rem;
+     max-width: 1600px;
+     margin: 0 auto;
+     width: 100%;
+     box-sizing: border-box;
+     }
+     
+     .experiment {
+       display: none;
+     }
+     
+     .experiment.active {
+       display: block;
+     }
+     
+     .experiment-card {
+       display: inline-flex;
+     flex-direction: column;
+     width: 300px;
+     height: 200px;
+     margin: 0.8rem;
+     background-color: white;
+     border-radius: 8px;
+     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+     overflow: hidden;
+     cursor: pointer;
+     transition: transform 0.3s, box-shadow 0.3s;
+     }
+     
+     .experiment-card:hover {
+       transform: translateY(-5px);
+       box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+     }
+     
+     .card-img {
+       width: 100%;
+       height: 140px;
+       background-size: cover;
+       background-position: center;
+     }
+     
+     .card-title {
+       padding: 10px 15px;
+       font-weight: bold;
+       text-align: center;
+     }
+     
+     #collision-img {
+       background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="140" viewBox="0 0 300 140"><rect width="300" height="140" fill="%23007acc"/><circle cx="100" cy="70" r="30" fill="%23ff6b6b"/><circle cx="200" cy="70" r="30" fill="%2343aa8b"/><line x1="75" y1="70" x2="40" y2="70" stroke="white" stroke-width="2"/><line x1="225" y1="70" x2="260" y2="70" stroke="white" stroke-width="2"/></svg>');
+     }
+     
+     #freefall-img {
+       background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="140" viewBox="0 0 300 140"><rect width="300" height="140" fill="%23f8961e"/><circle cx="150" cy="40" r="20" fill="%23577590"/><line x1="150" y1="70" x2="150" y2="120" stroke="white" stroke-width="2" stroke-dasharray="5,5"/><rect x="100" y="120" width="100" height="10" fill="%23333"/></svg>');
+     }
+     #projectile-img {
+   background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="140" viewBox="0 0 300 140"><rect width="300" height="140" fill="%23774936"/><path d="M 50,120 Q 150,10 250,120" stroke="white" stroke-width="2" stroke-dasharray="5,5" fill="none"/><circle cx="50" cy="120" r="15" fill="%234D908E"/><circle cx="150" cy="40" r="10" fill="%234D908E"/><circle cx="250" cy="120" r="15" fill="%234D908E"/></svg>');
+ }
+ 
+ #pendulum-img {
+   background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="140" viewBox="0 0 300 140"><rect width="300" height="140" fill="%232c3e50"/><line x1="150" y1="20" x2="100" y2="100" stroke="white" stroke-width="3"/><line x1="100" y1="100" x2="130" y2="120" stroke="%23bdc3c7" stroke-width="2"/><circle cx="150" cy="20" r="6" fill="%23ecf0f1"/><circle cx="100" cy="100" r="15" fill="%23ff6b6b"/><circle cx="130" cy="120" r="12" fill="%2343aa8b"/><path d="M 150,20 Q 125,60 100,100" stroke="%23ff6b6b" stroke-width="1" stroke-dasharray="3,3" fill="none" opacity="0.5"/></svg>');
+ }
+     .main-container {
+       display: flex;
+     flex-direction: row;
+     gap: 1.25rem;
+     margin-top: 1.25rem;
+     flex-wrap: wrap;
+     }
+     .left-column {
+       display: flex;
+     flex-direction: column;
+     gap: 1rem;
+     flex: 1 1 65%;
+     min-width: 300px;
+     }
+     .container {
+       display: flex;
+       flex-direction: column;
+       gap: 10px;
+       position: relative;
+     }
+     .outer-rectangle {
+       width: 100%;
+     aspect-ratio: 1.1/1;
+     max-height: 70vh;
+     background: linear-gradient(45deg, #006699, #0088cc);
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     overflow: hidden;
+     position: relative;
+     border-radius: 12px 12px 0 0;
+     box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+ }
+ 
+ canvas#rectangleCanvas {
+   border-radius: 8px;
+   box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+ }
+ 
+ .control-panel {
+   width: 100%;
+     display: flex;
+     flex-wrap: wrap;
+     justify-content: flex-start;
+     align-items: center;
+     background: white;
+     padding: 1rem;
+     border-radius: 8px;
+     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+     gap: 0.8rem;
+     position: relative;
+     z-index: 10;
+     border: none;
+     box-sizing: border-box;
+ }
+ .control-group {
+   display: flex;
+     align-items: center;
+     gap: 0.5rem;
+     padding: 0.5rem 0.75rem;
+     background-color: #f8f9fa;
+     border-radius: 6px;
+     transition: all 0.3s ease;
+     flex-wrap: wrap;
+ }
+ 
+ #singlePendulumControls, #doublePendulumControls {
+   display: flex;
+   flex-wrap: wrap;
+   gap: 0.8rem;
+   width: 100%;
+ }
+ 
+ #singlePendulumControls .control-group, #doublePendulumControls .control-group {
+   flex: 0 1 auto;
+ }
+     .control-panel input {
+       width: 60px;
+     }
+     .control-panel button {
+       padding: 5px 10px;
+       font-size: 0.9em;
+     }
+ .ball-list {
+   margin-top: 20px;
+   background: #ffffff;
+   padding: 15px;
+   border-radius: 8px;
+   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+   width: 600px;
+   max-height: 200px;
+   overflow-y: auto;
+   font-family: sans-serif;
+   font-size: 14px;
+   align-self: flex-start; 
+   border: none;
+ }
+     .trajectory-container {
+       margin-top: 0;
+     text-align: center;
+     position: relative;
+     flex: 1 1 30%;
+     min-width: 300px;
+     max-width: 100%;
+     background: white;
+     padding: 1rem;
+     border-radius: 8px;
+     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+     box-sizing: border-box;
+ }
+     #trajectoryCanvas {
+       width: 100%;
+     height: auto;
+     max-height: 60vh;
+     object-fit: contain;
+     border: 1px solid #ddd;
+     background-color: white;
+     border-radius: 4px;
+     margin-bottom: 0.6rem;
+     }
+     .cm-reference {
+       position: absolute;
+       left: 10px;
+       bottom: 10px; 
+       display: flex;
+       flex-direction: column;
+       align-items: flex-start;
+       background: rgba(255,255,255,0.7);
+       padding: 5px;
+       border: 1px solid #999;
+       border-radius: 3px;
+       font-size: 9px;
+     }
+ 
+     .cm-line {
+       display: flex;
+       align-items: center;
+       margin: 3px 0;
+     }
+ 
+     .cm-ruler {
+       width: 28.3px; 
+       height: 10px; 
+       background: #000;
+       margin-right: 5px;
+     }
+ 
+     .cm-label {
+       font-size: 10px;
+       font-weight: bold;
+     }
+ button {
+   padding: 0.5rem 1rem;
+     background: linear-gradient(to bottom, #4c91cd, #007acc);
+     border: none;
+     border-radius: 5px;
+     color: white;
+     font-weight: 600;
+     cursor: pointer;
+     transition: all 0.2s ease;
+     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+     margin: 0.3rem;
+     font-size: 0.9rem;
+ }
+ 
+ button:hover {
+   background: linear-gradient(to bottom, #5ba3df, #0088e0);
+   box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+   transform: translateY(-1px);
+ }
+ 
+ button:active {
+   background: linear-gradient(to bottom, #3a7cb4, #0069b3);
+   box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+   transform: translateY(1px);
+ }
+ 
+ button:disabled {
+   background: #cccccc;
+   color: #888888;
+   box-shadow: none;
+   cursor: not-allowed;
+ }
+ 
+ 
+ .control-group:hover {
+   background-color: #f0f5fa;
+   box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+ }
+ 
+ .control-panel label {
+   font-weight: 600;
+     color: #444;
+     min-width: 80px;
+     font-size: 0.9rem;
+ }
+ 
+ .control-panel input {
+   width: 70px;
+     padding: 0.5rem;
+     border: 1px solid #ccc;
+     border-radius: 4px;
+     font-size: 0.9rem;
+     transition: border 0.3s ease;
+ }
+ 
+ .control-panel input:focus {
+   border-color: #007acc;
+   outline: none;
+   box-shadow: 0 0 0 2px rgba(0,122,204,0.2);
+ }
+ 
+ .control-panel input[type="color"] {
+   width: 50px;
+   height: 30px;
+   padding: 0;
+ }
+ 
+ 
+ .ball-list h3 {
+   margin-top: 0;
+   margin-bottom: 10px;
+   color: #333;
+   border-bottom: 2px solid #f0f0f0;
+   padding-bottom: 8px;
+ }
+ 
+ .ball-list ul {
+   padding-left: 20px;
+ }
+ 
+ .ball-list li {
+   padding: 5px 0;
+   border-bottom: 1px solid #624848;
+ }
+ 
+ 
+ .trajectory-container h3 {
+   margin-top: 0;
+   margin-bottom: 10px;
+   color: #333;
+ }
+ 
+ #trajectoryCanvas, #ffGraphCanvas {
+   width: 100%;
+   height: auto;
+   border: 1px solid #ddd;
+   background-color: white;
+   border-radius: 4px;
+   margin-bottom: 10px;
+ }
+ 
+ #rectangleCanvas {
+   cursor: grab;
+ }
+ 
+ #rectangleCanvas:active {
+   cursor: grabbing;
+ }
+ 
+ [data-tooltip] {
+   position: relative;
+ }
+ 
+ [data-tooltip]:before {
+   content: attr(data-tooltip);
+   position: absolute;
+   bottom: 100%;
+   left: 50%;
+   transform: translateX(-50%);
+   padding: 5px 10px;
+   background-color: #333;
+   color: white;
+   font-size: 12px;
+   border-radius: 4px;
+   white-space: nowrap;
+   opacity: 0;
+   visibility: hidden;
+   transition: opacity 0.3s, visibility 0.3s;
+   z-index: 10;
+ }
+ 
+ [data-tooltip]:hover:before {
+   opacity: 1;
+   visibility: visible;
+ }
+ 
+ .experiment {
+   opacity: 0;
+   transform: translateY(20px);
+   transition: opacity 0.4s ease, transform 0.4s ease;
+   display: none;
+ }
+ 
+ .experiment.active {
+   opacity: 1;
+   transform: translateY(0);
+   display: block;
+ }
+ .tab-container {
+   width: 100%;
+     margin-bottom: 1rem;
+ }
+ 
+ .tab-header {
+   display: flex;
+     border-bottom: 1px solid #ddd;
+     flex-wrap: wrap;
+ }
+ 
+ .tab-btn {
+   padding: 0.5rem 0.8rem;
+     font-size: 0.85rem;
+ }
+ 
+ .tab-btn.active {
+   background: linear-gradient(to bottom, #4c91cd, #007acc);
+   color: white;
+   border-color: #007acc;
+ }
+ 
+ .tab-content {
+   border: 1px solid #ddd;
+   border-top: none;
+   padding: 10px;
+   background: #fff;
+ }
+ 
+ .tab-pane {
+   display: none;
+ }
+ 
+ .tab-pane.active {
+   display: block;
+ }
+ 
+ .results-table {
+   width: 100%;
+     border-collapse: collapse;
+     margin-bottom: 1rem;
+     font-size: 0.9rem;
+ }
+ 
+ .results-table th, .results-table td {
+   border: 1px solid #ddd;
+   padding: 8px;
+   text-align: left;
+ }
+ 
+ .results-table th {
+   background-color: #f2f2f2;
+ }
+ .table-angle-indicator {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    margin: 5px auto;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    overflow: hidden;
+  }
+ @media (max-width: 1200px) {
+     .main-container {
+       flex-direction: column;
+     }
+     
+     .trajectory-container {
+       max-width: 100%;
+     }
+   }
+   
+   @media (max-width: 768px) {
+     .navbar {
+       flex-direction: column;
+       align-items: flex-start;
+     }
+     
+     .navbar-menu {
+       margin-top: 0.5rem;
+     }
+     
+     .control-panel {
+       flex-direction: column;
+       align-items: stretch;
+     }
+     
+     .control-group {
+       width: 100%;
+     }
+   }
+   
+   @media (max-width: 480px) {
+     .experiment-card {
+       width: 100%;
+       margin: 0.8rem 0;
+     }
+     
+     .navbar-item {
+       padding: 0.4rem 0.8rem;
+       font-size: 0.9rem;
+     }
+   }
+   </style>
+ </head>
+ <body>
+   <div class="navbar">
+     <div class="navbar-brand" data-i18n="app.title">Air Table Experiment Simulations</div>
+     <div class="navbar-menu">
+       <div class="navbar-item active" onclick="showExperiment('home')" data-i18n="app.home">Home</div>
+       <div class="navbar-item" onclick="showExperiment('collision')" data-i18n="navbar.collision">Collision</div>
+       <div class="navbar-item" onclick="showExperiment('freefall')" data-i18n="navbar.freefall">Free Fall</div>
+       <div class="navbar-item" onclick="showExperiment('projectile')" data-i18n="navbar.projectile">Projectile Motion</div>
+       <div class="navbar-item" onclick="showExperiment('pendulum')" data-i18n="navbar.pendulum">Pendulum</div>
+     </div>
+     <div style="margin-left: auto; display: flex; gap: 0.5rem;">
+       <button onclick="switchLanguage('tr')" style="padding: 0.4rem 0.8rem; background-color: #555; border: none; color: white; cursor: pointer; border-radius: 4px; transition: background-color 0.3s;" id="trBtn">TR</button>
+       <button onclick="switchLanguage('en')" style="padding: 0.4rem 0.8rem; background-color: #333; border: none; color: white; cursor: pointer; border-radius: 4px; transition: background-color 0.3s;" id="enBtn">EN</button>
+     </div>
+   </div>
+
+   <!-- experiment -->
+   <div class="experiment-container">
+     <div id="home-experiment" class="experiment active">
+       <h2 data-i18n="app.title">Air Table Experiment Simulations</h2>
+       <p data-i18n="home.select">Select the experiment you want to work with:</p>
+
+       <div class="experiment-card" onclick="showExperiment('collision')">
+         <div class="card-img" id="collision-img"></div>
+         <div class="card-title" data-i18n="collision.title">Collision Experiment</div>
+       </div>
+
+       <div class="experiment-card" onclick="showExperiment('freefall')">
+         <div class="card-img" id="freefall-img"></div>
+         <div class="card-title" data-i18n="freefall.title">Free Fall Experiment</div>
+       </div>
+     <div class="experiment-card" onclick="showExperiment('projectile')">
+       <div class="card-img" id="projectile-img"></div>
+       <div class="card-title" data-i18n="projectile.title">Projectile Motion Experiment</div>
+     </div>
+     <div class="experiment-card" onclick="showExperiment('pendulum')">
+       <div class="card-img" id="pendulum-img"></div>
+       <div class="card-title" data-i18n="pendulum.title">Pendulum Experiment</div>
+     </div>
+   </div>
+     
+      <!-- Collision Experiment -->
+     <div id="collision-experiment" class="experiment">
+       <div class="main-container">
+         <div class="left-column">
+           <div class="container">
+             <div class="outer-rectangle">
+               <canvas id="rectangleCanvas" width="1000" height="1000"></canvas>
+             </div>
+             <div class="control-panel">
+               <div class="control-group">
+                 <label data-i18n="labels.mass">Mass:</label>
+                 <input id="massInput" type="number" step="0.1" value="1.0" data-i18n-title="labels.mass">
+               </div>
+               <div class="control-group">
+                 <label data-i18n="labels.speed">Speed (magnitude):</label>
+                 <input id="speedInput" type="number" step="0.1" value="3.0" data-i18n-title="labels.speed">
+               </div>
+               <div class="control-group">
+                 <label data-i18n="labels.direction">Direction (°):</label>
+                 <input id="angleInput" type="number" step="1" value="0" data-i18n-title="labels.direction">
+               </div>
+               <div class="control-group">
+                 <label data-i18n="labels.color">Color:</label>
+                 <input id="colorInput" type="color" value="#ff0000" data-i18n-title="labels.color">
+               </div>
+               <div class="control-group">
+                 <label data-i18n="labels.rectAngle">Rectangle Angle:</label>
+                 <input id="rectAngleInput" type="number" step="1" value="0" data-i18n-title="labels.rectAngle">
+                 <button id="setRectAngleButton" data-i18n="buttons.setRectAngle">Set Angle</button>
+               </div>
+               <div class="control-group">
+                 <button id="createBallButton" data-i18n="buttons.createBall">Create Ball</button>
+                 <button id="spawnBallsButton" data-i18n="buttons.start">Start</button>
+                 <button id="removeBallsButton" data-i18n="buttons.removeBalls">Clear</button>
+               </div>
+             </div>
+           </div>
+           
+     
+           <div class="ball-list" id="ballList">
+             <h3 data-i18n="collision.ballList">Created Balls</h3>
+             <ul id="ballListUl"></ul>
+           </div>
+         </div>
+     
+         <div class="trajectory-container">
+           <h3 data-i18n="collision.trajectory">Ball Records</h3>
+           <canvas id="trajectoryCanvas" width="595" height="842"></canvas>
+           <div class="cm-reference">
+             <div class="cm-line">
+               <div class="cm-ruler"></div>
+               <div class="cm-label">1 cm</div>
+             </div>
+             <div class="cm-label">A4 paper (21 cm × 29.7 cm)</div>
+           </div>
+           <br/>
+           <button id="saveBtn" data-i18n="buttons.save">Save (PNG)</button>
+         </div>
+       </div>
+     </div>
+
+     <!-- Free Fall -->
+     <div id="freefall-experiment" class="experiment">
+       <div class="main-container">
+         <div class="left-column">
+           <div class="container">
+             <div class="outer-rectangle" style="background-color: #f8961e;">
+               <canvas id="freefallCanvas" width="1000" height="1000"></canvas>
+             </div>
+             <div class="control-panel">
+               <div class="control-group">
+                 <label data-i18n="labels.mass">Mass (kg):</label>
+                 <input id="ffMassInput" type="number" step="0.1" value="1.0">
+               </div>
+               <div class="control-group">
+                 <label data-i18n="labels.height">Height (m):</label>
+                 <input id="ffHeightInput" type="number" step="0.1" value="10.0">
+               </div>
+               <div class="control-group">
+                 <label data-i18n="labels.gravity">Gravity (m/s²):</label>
+                 <input id="ffGravityInput" type="number" step="0.1" value="9.8">
+               </div>
+               <div class="control-group">
+                 <button id="ffStartButton" data-i18n="buttons.start">Start</button>
+                 <button id="ffResetButton" data-i18n="buttons.reset">Reset</button>
+                 <div class="control-group">
+                   <label data-i18n="labels.energyLoss">Energy Loss (%):</label>
+                   <input id="ffEnergyLossInput" type="number" min="0" max="100" step="1" value="20" data-i18n-title="labels.energyLoss">
+                 </div>
+                 <div class="control-group">
+                   <label data-i18n="labels.bouncing">Bouncing:</label>
+                   <input id="ffBouncingCheckbox" type="checkbox" checked data-i18n-title="labels.bouncing">
+                 </div>
+               </div>
+             </div>
+           </div>
+           <div class="ball-list">
+             <h3 data-i18n="freefall.results">Free Fall Results</h3>
+             <div id="ffResults">
+               <p data-i18n="freefall.results.description">Results will be displayed when the experiment starts.</p>
+             </div>
+           </div>
+         </div>
+         <div class="trajectory-container">
+           <h3 data-i18n="graphs.time">Position-Time Graph</h3>
+           <canvas id="ffGraphCanvas" width="595" height="400"></canvas>
+           <br/>
+           <button id="ffSaveGraphBtn" data-i18n="buttons.saveGraph">Save Graph</button>
+         </div>
+       </div>
+     </div>
+   </div>
+    <!-- Projectile Motion -->
+   <div id="projectile-experiment" class="experiment">
+   <div class="main-container">
+     <div class="left-column">
+       <div class="container">
+         <div class="outer-rectangle" style="background-color: #774936;">
+           <canvas id="projectileCanvas" width="1900" height="1300"></canvas>
+         </div>
+         <div class="control-panel">
+           <div class="control-group">
+             <label data-i18n="projectile.initialVelocity">Initial Velocity (m/s):</label>
+             <input id="pmVelocityInput" type="number" step="0.1" value="20.0" data-i18n-title="projectile.initialVelocity">
+           </div>
+           <div class="control-group">
+             <label data-i18n="labels.angle">Launch Angle (°):</label>
+             <input id="pmAngleInput" type="number" step="1" value="45" min="0" max="90" data-i18n-title="labels.angle">
+           </div>
+           <div class="control-group">
+            <label data-i18n="labels.tableAngle">Table Angle (θ°):</label>
+            <input id="pmTableAngleInput" type="number" min="0" max="90" step="1" value="90" data-i18n-title="labels.tableAngle">
+            <span id="pmTableAngleValue">90°</span>
+            <div class="table-angle-indicator">
+              <canvas id="pmTableAngleCanvas" width="100" height="100"></canvas>
+            </div>
+          </div>
+           <div class="control-group">
+             <label data-i18n="labels.gravity">Gravity (m/s²):</label>
+             <input id="pmGravityInput" type="number" step="0.1" value="9.8" data-i18n-title="labels.gravity">
+           </div>
+           <div class="control-group">
+             <label data-i18n="labels.height">Initial Height (m):</label>
+             <input id="pmHeightInput" type="number" step="0.1" value="45.0" data-i18n-title="labels.height">
+           </div>
+           <div class="control-group">
+             <label data-i18n="labels.mass">Mass (kg):</label>
+             <input id="pmMassInput" type="number" step="0.1" value="1.0" data-i18n-title="labels.mass">
+           </div>
+           <div class="control-group">
+             <label data-i18n="labels.airResistance">Air Resistance:</label>
+             <input id="pmAirResistanceCheckbox" type="checkbox" data-i18n-title="labels.airResistance">
+           </div>
+           
+           <div class="control-group">
+             <label data-i18n="labels.dragCoefficient">Drag Coefficient:</label>
+             <input id="pmDragCoefficientInput" type="number" step="0.1" value="0.1" min="0" data-i18n-title="labels.dragCoefficient">
+           </div>
+           <div class="control-group">
+             <button id="pmStartButton" data-i18n="buttons.start">Start</button>
+             <button id="pmResetButton" data-i18n="buttons.reset">Reset</button>
+             <button id="pmTraceButton" data-i18n="buttons.trace">Trace Mode</button>
+           </div>
+     </div>
+   </div>
+     </div>
+ 
+     <div class="trajectory-container">
+       <h3 data-i18n="graphs.time">Motion Graphs</h3>
+       <div class="tab-container">
+         <div class="tab-header">
+           <button class="tab-btn active" data-target="positionTab" data-i18n="graphs.position">Position-Time</button>
+           <button class="tab-btn" data-target="velocityTab" data-i18n="graphs.velocity">Velocity-Time</button>
+           <button class="tab-btn" data-target="energyTab" data-i18n="graphs.energy">Energy-Time</button>
+         </div>
+         <div class="tab-content">
+           <div id="positionTab" class="tab-pane active">
+             <canvas id="pmPositionCanvas" width="595" height="400"></canvas>
+           </div>
+           <div id="velocityTab" class="tab-pane">
+             <canvas id="pmVelocityCanvas" width="595" height="400"></canvas>
+           </div>
+           <div id="energyTab" class="tab-pane">
+             <canvas id="pmEnergyCanvas" width="595" height="400"></canvas>
+           </div>
+         </div>
+       </div>
+       <br/>
+       <button id="pmSaveGraphBtn" data-i18n="buttons.saveGraph">Save Graph</button>
+       <button id="pmSaveDataBtn" data-i18n="buttons.saveData">Save Data</button>
+       <div class="results-panel" style="margin-top: 20px; width: 100%;">
+         <div style="background: #ffffff; padding: 15px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 100%; overflow-y: visible; max-height: none; font-family: sans-serif; font-size: 14px; border: none;">
+           <h3 data-i18n="projectile.title">Projectile Motion Results</h3>
+           <div id="pmResults" style="margin-top: 10px; line-height: 1.5;">
+             <p>Results will be displayed when the experiment starts.</p>
+           </div>
+         </div>
+       </div>
+     </div>
+   </div>
+</div>
+   <!-- Pendulum Experiment -->
+   <div id="pendulum-experiment" class="experiment">
+     <div class="main-container">
+       <div class="left-column">
+         <div class="container">
+           <div class="outer-rectangle" style="background: linear-gradient(45deg, #2c3e50, #34495e);">
+             <canvas id="pendulumCanvas" width="1000" height="1000"></canvas>
+           </div>
+           <div class="control-panel">
+             <!-- Controls -->
+             <div class="control-group">
+               <label data-i18n="labels.gravity">Gravity (m/s²):</label>
+               <input id="pendGravityInput" type="number" step="0.1" value="9.8" data-i18n-title="labels.gravity">
+             </div>
+             <div class="control-group">
+               <label data-i18n="labels.tableAngle">Table Angle (θ°):</label>
+               <input id="pendTableAngleInput" type="number" min="0" max="90" step="1" value="90" data-i18n-title="labels.tableAngle">
+               <span id="pendTableAngleValue">90°</span>
+             </div>
+             <div class="control-group" style="justify-content: center;">
+               <div class="table-angle-indicator">
+                 <canvas id="pendTableAngleCanvas" width="100" height="100"></canvas>
+               </div>
+             </div>
+             
+             <!-- Single Pendulum Controls -->
+             <div id="singlePendulumControls">
+               <div class="control-group">
+                 <label data-i18n="labels.length">Length (m):</label>
+                 <input id="pendLength1Input" type="number" step="0.1" value="2.0" min="0.1" data-i18n-title="labels.length">
+               </div>
+               <div class="control-group">
+                 <label data-i18n="labels.mass">Mass (kg):</label>
+                 <input id="pendMass1Input" type="number" step="0.1" value="1.0" min="0.1" data-i18n-title="labels.mass">
+               </div>
+               <div class="control-group">
+                 <label data-i18n="labels.initialAngle">Initial Angle (°):</label>
+                 <input id="pendAngle1Input" type="number" step="1" value="45" min="-180" max="180" data-i18n-title="labels.initialAngle">
+               </div>
+               <div class="control-group">
+                 <label data-i18n="labels.damping">Damping:</label>
+                 <input id="pendDampingInput" type="number" step="0.01" value="0" min="0" data-i18n-title="labels.damping">
+               </div>
+             </div>
+             
+
+             <div class="control-group">
+               <button id="pendStartButton" data-i18n="buttons.start">Start</button>
+               <button id="pendResetButton" data-i18n="buttons.reset">Reset</button>
+               <button id="pendTraceButton" data-i18n="buttons.trace">Trace Mode</button>
+             </div>
+           </div>
+         </div>
+         
+         <div class="ball-list" style="max-height: 300px;">
+           <h3 data-i18n="pendulum.title">Pendulum Results</h3>
+           <div id="pendResults">
+             <p>Results will be displayed when the experiment starts.</p>
+           </div>
+         </div>
+       </div>
+       
+       <div class="trajectory-container">
+         <h3 data-i18n="graphs.time">Motion Graphs</h3>
+         <div class="tab-container">
+           <div class="tab-header">
+             <button class="tab-btn active" data-target="pendAngleTab" data-i18n="graphs.angle">Angle-Time</button>
+             <button class="tab-btn" data-target="pendVelocityTab" data-i18n="graphs.angularVelocity">Angular Vel.-Time</button>
+             <button class="tab-btn" data-target="pendEnergyTab" data-i18n="graphs.energy">Energy-Time</button>
+             <button class="tab-btn" data-target="pendPhaseTab" data-i18n="graphs.phase">Phase Space</button>
+           </div>
+           <div class="tab-content">
+             <div id="pendAngleTab" class="tab-pane active">
+               <canvas id="pendAngleCanvas" width="595" height="400"></canvas>
+             </div>
+             <div id="pendVelocityTab" class="tab-pane">
+               <canvas id="pendVelocityCanvas" width="595" height="400"></canvas>
+             </div>
+             <div id="pendEnergyTab" class="tab-pane">
+               <canvas id="pendEnergyCanvas" width="595" height="400"></canvas>
+             </div>
+             <div id="pendPhaseTab" class="tab-pane">
+               <canvas id="pendPhaseCanvas" width="595" height="400"></canvas>
+             </div>
+           </div>
+         </div>
+         <br/>
+         <button id="pendSaveGraphBtn" data-i18n="buttons.saveGraph">Save Graph</button>
+         
+         <div style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px; font-size: 13px;">
+           <h4 style="margin-top: 0;">About Pendulum</h4>
+           <p><strong>Simple Pendulum:</strong> Exhibits simple harmonic motion (at small angles). Period: T = 2π√(L/g)</p>
+           <p><strong>Table Angle:</strong> The tilt of the air table changes the effective gravity: g<sub>eff</sub> = g × sin(θ)</p>
+         </div>
+       </div>
+     </div>
+   </div>
+  </div> 
+
+ <script src="i18n.js"></script>
+ <script src="freefall.js" ></script>
+ <script src="collision.js"></script>
+ <script src="projectile.js"></script>
+ <script src="pendulum.js"></script>
+ <script>
+   // Language button styling
+   document.addEventListener('languageChanged', function(e) {
+     const trBtn = document.getElementById('trBtn');
+     const enBtn = document.getElementById('enBtn');
+     if (e.detail.language === 'tr') {
+       trBtn.style.backgroundColor = '#555';
+       enBtn.style.backgroundColor = '#333';
+       document.documentElement.lang = 'tr';
+     } else {
+       trBtn.style.backgroundColor = '#333';
+       enBtn.style.backgroundColor = '#555';
+       document.documentElement.lang = 'en';
+     }
+   });
+ </script>
+ </body>
+ </html>

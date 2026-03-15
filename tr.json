@@ -1,0 +1,113 @@
+{
+  "app": {
+    "title": "Hava Masası Deneyleri Simülasyonları",
+    "home": "Ana Sayfa"
+  },
+  "home": {
+    "select": "Çalışmak istediğiniz deneyi seçin:"
+  },
+  "navbar": {
+    "collision": "Çarpışma",
+    "freefall": "Serbest Düşüş",
+    "projectile": "Eğik Atış",
+    "pendulum": "Sarkaç",
+    "wfc": "Sudoku WFC"
+  },
+  "buttons": {
+    "start": "Başlat",
+    "reset": "Sıfırla",
+    "save": "Kaydet",
+    "step": "Adım",
+    "createBall": "Top Oluştur",
+    "spawnBalls": "Topları Gönder",
+    "removeBalls": "Topları Çıkar",
+    "setRectAngle": "Açıyı Ayarla",
+    "trace": "İz Modu",
+    "saveGraph": "Grafiği Kaydet",
+    "saveData": "Verileri Kaydet"
+  },
+  "labels": {
+    "mass": "Kütle (kg)",
+    "speed": "Hız (m/s)",
+    "angle": "Açı (°)",
+    "direction": "Yön (°)",
+    "color": "Renk",
+    "rectAngle": "Dikdörtgen Açısı (°)",
+    "height": "Yükseklik (m)",
+    "gravity": "Yerçekimi (m/s²)",
+    "energyLoss": "Enerji Kaybı (%)",
+    "bouncing": "Sıçrama",
+    "airResistance": "Hava Direnci",
+    "dragCoefficient": "Sürükleme Katsayısı",
+    "tableAngle": "Masa Eğimi (°)",
+    "velocity": "Hız (m/s)",
+    "length": "Uzunluk (m)",
+    "damping": "Sönümleme",
+    "initialAngle": "Başlangıç Açısı (°)"
+  },
+  "collision": {
+    "title": "Çarpışma Deneyi",
+    "description": "İki cismin çarpışmasını simüle edin",
+    "ballList": "Oluşturulan Toplar",
+    "trajectory": "Topların Kaydı"
+  },
+  "freefall": {
+    "title": "Serbest Düşüş",
+    "description": "Serbest düşüş hareketini inceleyin",
+    "results": "Serbest Düşüş Sonuçları",
+    "time": "Zaman (s)",
+    "position": "Konum (m)",
+    "velocity": "Hız (m/s)",
+    "pe": "Potansiyel Enerji (J)",
+    "ke": "Kinetik Enerji (J)"
+  },
+  "projectile": {
+    "title": "Eğik Atış",
+    "description": "Eğik atış hareketini simüle edin",
+    "initialVelocity": "İlk Hız (m/s)",
+    "range": "Mesafe (m)",
+    "maxHeight": "Maksimum Yükseklik (m)",
+    "timeOfFlight": "Uçuş Süresi (s)"
+  },
+  "pendulum": {
+    "title": "Sarkaç Deneyi",
+    "description": "Sarkaç hareketini simüle edin",
+    "type": "Sarkaç Tipi",
+    "single": "Tek",
+    "double": "Çift",
+    "length1": "Uzunluk 1 (m)",
+    "length2": "Uzunluk 2 (m)",
+    "mass1": "Kütle 1 (kg)",
+    "mass2": "Kütle 2 (kg)",
+    "angle1": "Açı 1 (°)",
+    "angle2": "Açı 2 (°)",
+    "period": "Periyot (s)",
+    "frequency": "Frekans (Hz)"
+  },
+  "wfc": {
+    "title": "Sudoku WFC",
+    "description": "Wave Function Collapse ile Sudoku çöz"
+  },
+  "alerts": {
+    "invalidMass": "Geçerli bir kütle giriniz!",
+    "invalidHeight": "Geçerli bir yükseklik giriniz!",
+    "invalidGravity": "Geçerli bir yerçekimi değeri giriniz!",
+    "invalidAngle": "Açı 0° ile 90° arasında olmalıdır!",
+    "invalidInitialHeight": "Geçerli bir başlangıç yüksekliği giriniz!",
+    "invalidDragCoefficient": "Geçerli bir hava direnci katsayısı giriniz!",
+    "enterMass": "Kütle giriniz!",
+    "enterSpeed": "Hız giriniz!",
+    "enterDirection": "Yön (derece) giriniz!"
+  },
+  "graphs": {
+    "position": "Konum-Zaman",
+    "velocity": "Hız-Zaman",
+    "energy": "Enerji-Zaman",
+    "angle": "Açı-Zaman",
+    "angularVelocity": "Açısal Hız-Zaman",
+    "phase": "Faz Uzayı",
+    "time": "Hareket Grafikleri",
+    "xAxis": "X Ekseni (m)",
+    "yAxis": "Y Ekseni (m)"
+  }
+}
