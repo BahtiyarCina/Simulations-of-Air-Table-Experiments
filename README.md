@@ -19,7 +19,7 @@ Single pendulum simulation using 4th-order Runge-Kutta integration. Adjustable l
 
 ## Features
 
-- **Bilingual UI** — switch between Turkish 🇹🇷 and English 🇬🇧 at any time via the language buttons
+- **Bilingual UI** — switch between Turkish and English at any time via the language buttons
 - **Real-time graphs** — position, velocity, energy, and phase space plots update every frame
 - **Table angle simulation** — all experiments support a tilting air table that scales effective gravity
 - **Export** — save graphs as PNG and data as CSV
